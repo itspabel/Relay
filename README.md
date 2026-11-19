@@ -17,105 +17,58 @@ devices.**
 
 ## About Relay
 
-Relay is an Android communication project designed to help people
-connect directly with nearby devices---without relying on cloud
-accounts, remote messaging servers, or an internet connection for
-everyday communication.
+# Relay — Offline Peer-to-Peer Communication & File Transfer
 
-It is being designed around local connectivity technologies, with
-privacy, direct communication, and practical offline use at its core.
+**Relay** (`com.pabel.relay`) is an offline-first Android communication, local file sharing, and synchronized media playback application designed to work directly between nearby Android devices without internet access, mobile data, or cloud accounts.
 
-> **Internet policy:** Messaging, calls, nearby discovery, and local
-> file sharing are intended to work over supported nearby connections.
-> Internet access is used only for optional tasks such as checking and
-> downloading app updates.
+---
 
-## Planned Features
+## App Description
 
-  -----------------------------------------------------------------------
-  Feature                             Description
-  ----------------------------------- -----------------------------------
-  Private messaging                   Exchange messages directly with
-                                      nearby users.
+Relay turns nearby Android phones and tablets into a private, server-free communication and sharing network. After creating a local-only identity during onboarding—complete with a cryptographic Android Keystore fingerprint and no phone number, email, or account sign-up—users can discover nearby Relay peers over Bluetooth, BLE, Wi-Fi Direct, and same-Wi-Fi/hotspot local networks, or pair instantaneously using time-limited single-use QR codes.
 
-  Group chats                         Communicate with multiple connected
-                                      devices.
+Once connected, users can exchange offline messages, manage local voice/video call sessions, transfer multiple files with Relay's built-in file browser, and listen to music or watch videos together in real time over a local network room.
 
-  Audio & video calls                 Make one-to-one and supported group
-                                      calls.
+---
 
-  File sharing                        Send and receive files between
-                                      nearby devices.
+## Key Features
 
-  Voice messages                      Exchange recorded voice messages.
+### 1. Zero-Account Local Identity & Security
+- **Offline Onboarding:** Set up a display name, geometric monogram avatar (or local photo via Android Photo Picker), and local device ID without email, phone number, or cloud login.
+- **On-Device Cryptographic Fingerprints:** Generates a local device identity fingerprint backed by Android Keystore (`6-digit` verification code matching on QR confirmation).
+- **Ephemeral Single-Use QR Session Tokens:** Pairing and transfer QR codes embed time-limited (`1m` / `2m` / `5m` configurable) single-use tokens that expire automatically after expiry or successful use—never exposing private keys.
+- **Trusted Peer Management:** Review, trust, disconnect, or remove paired devices stored locally in Room.
 
-  Nearby discovery                    Find other Relay devices in
-                                      connection range.
+### 2. Multi-Transport Nearby Device Discovery & Diagnostics
+- **Multi-Radio Local Discovery:** Searches simultaneously across:
+  - **Bluetooth Classic & BLE (with GATT identity exchange)**
+  - **Wi-Fi Direct (`WifiP2pManager` peer & DNS-SD service discovery)**
+  - **Same Wi-Fi LAN / Mobile Hotspot (NSD mDNS + UDP broadcast/hotspot beacon fallback)**
+- **Real-Time Radio & Permission Readiness:** Live indicators for Bluetooth, Wi-Fi/P2P, Location status (on Android 12 and lower), Bluetooth discoverability prompt, and clear per-permission / transport diagnostic messages.
+- **No Fake Peers:** Displays only real nearby Relay devices detected over active local radios or QR handshakes.
 
-  Together Mode                       Listen to music and watch local
-                                      videos together with synchronized
-                                      playback.
+### 3. In-App QR Pairing & Transfer Connection
+- **My QR Pairing Identity & Transfer QR:** Generate live QR cards with countdown timers, configurable expiration (`1m`, `2m`, `5m`), and one-tap regeneration.
+- **Built-In Camera QR Scanner:** Requests `CAMERA` permission only when scanning is started, validates Relay QR payloads (rejecting expired, replayed, self-scanned, or malformed codes), and shows target device info + 6-digit security verification code before connecting.
+- **Manual IP/Port Fallback:** Advanced manual endpoint entry remains available on the Transfers screen alongside one-scan QR transfer setup.
 
-  Local history                       Keep conversations and transfer
-                                      history on the device.
-  -----------------------------------------------------------------------
+### 4. Custom Privacy-Respecting File Browser & Transfers
+- **No Broad Storage or Folder Permissions:** Selects individual files using Android's supported file picker & MediaStore/SAF workflows—no forced folder permissions or `READ_EXTERNAL_STORAGE`/`MANAGE_EXTERNAL_STORAGE`.
+- **Categorized Browsing:** Filter across **All Files**, **Images**, **Videos**, **Audio**, **Documents**, and **Other Files** (including archives such as `.zip`, `.rar`, `.7z`).
+- **Rich File Cards & Controls:** Displays thumbnails for images and videos, file type icons, file sizes, modification dates, live search, sorting options, multi-file selection counters, and staged transfer queue.
+- **Incoming Receiver & Local Storage:** Toggle local TCP file receiver mode, track transfer progress/status, and save received files cleanly to `Downloads/Relay`.
 
-*Feature availability depends on implementation progress, Android
-permissions, device capabilities, and connection conditions. This list
-describes the project scope; it does not imply that every feature is
-already complete.*
+### 5. Offline Chats & Calls
+- **Offline Conversations:** Local peer-to-peer chat conversations and store-and-forward offline message queuing backed by local Room persistence.
+- **Local Calls:** Audio and video call history and local session management tied to connected offline peers without internet signaling servers.
 
-## Connection Methods
+### 6. Together Mode (Synced Media Rooms)
+- **Host & Join Over Local Wi-Fi / Wi-Fi Direct:** Pick local audio or video media to stream and synchronize playback across nearby Relay devices in a shared local listening or watch room.
 
-Relay is designed to support:
-
--   **Bluetooth** --- nearby discovery, pairing, messaging, and suitable
-    small transfers.
--   **Same Wi-Fi network** --- preferred for higher-speed transfers,
-    calls, and media streaming.
--   **Wi-Fi Direct** --- direct device-to-device communication without
-    requiring a conventional Wi-Fi router.
-
-The app should select a suitable connection method based on the task and
-device capabilities. Real-world connectivity can vary by Android
-version, hardware, and network configuration.
-
-## Privacy by Design
-
-Relay's goal is to keep everyday communication local:
-
--   No account registration for nearby communication.
--   No cloud messaging service.
--   No remote database for conversations.
--   Local conversation and transfer history.
--   Secure device pairing and protected communication.
--   No advertising or tracking by design.
-
-Security features and encryption must be verified in the actual release;
-this section describes the project's privacy goals, not an independent
-security certification.
-
-## App Information
-
-  Item                      Value
-  ------------------------- -------------------
-  App name                  Relay
-  Android package           `com.pabel.relay`
-  Current planned release   `v1.0.0`
-  Version code              `100`
-  Platform                  Android
-
-## Updates
-
-Relay includes a planned GitHub-based update checker.
-
-When an internet connection is available, the app can check the
-project's `update.json` file for a newer version. If an update is
-available, the app can show release information and direct users to the
-official release download.
-
-The update checker is optional. It does not provide the communication
-system or make nearby messaging dependent on the internet.
+### 7. Adaptive Material 3 Interface & Personalization
+- **Themes & Responsive Layout:** Supports Dark, Light, and System themes, dynamic Navigation Bar (phones) / Navigation Rail (tablets & wide screens), and edge-to-edge system bar insets.
+- **Storage & Diagnostics Settings:** Inspect local Room database, cache, and received file storage sizes, clear temporary cache safely, and review permission statuses.
+- **About & Update Check:** Includes developer profile, featured projects, and manual/periodic GitHub release update check (`minSdk 24` / Android 7.0 through `targetSdk 36` / Android 16). 
 
 ## Developer
 
